@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>- pages -</title>
+    <style>
+        * { font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        html, body {
+            margin: unset;
+            display: flex;
+            flex-flow: column;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+        }
+        #title {
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 10px;
+
+            flex: 0 0 auto;
+        }
+        #title > h1 {
+            line-height: 0px;
+            font-size: 50px;
+        }
+        #title > p > a {
+            color: black;
+            text-decoration: none;
+        }
+        #title > p > a:hover { text-decoration: underline; }
+        #title > p > a:active { text-decoration: none; }
+        .divider {
+            margin: 10px;
+            margin-left: 25px;
+            margin-right: 25px;
+            background-color: black;
+            border-radius: 2.5px;
+            height: 5px;
+            flex: 0 0 auto;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            flex: 1 1 auto;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading > #pages { display: none; }
+        .loading > #loading { display: flex; }
+        #pages {
+            flex: 1 1 auto;
+            height: 100%;
+        }
+        .page {
+            text-align: center;
+            padding: 10px;
+        }
+        .page:hover { background-color: rgb(245, 245, 245); }
+        .page:active { background-color: unset; }
+        .page > a, .page > button {
+            color: black;
+            font-size: medium;
+            text-decoration: none;
+        }
+        .page > button {
+            border: none;
+            background-color: unset;
+        }
+        .page:hover > a, .page:hover > button { text-decoration: underline; }
+        .page:active > a, .page:active > button { text-decoration: none; }
+        @media screen and (max-width: 299px) {
+            #title > h1 { font-size: 16.5vw; }
+            #title > p { font-size: 5vw; }
+            #loading > h1 { font-size: 9vw; }
+            .page > a, .page > button { font-size: 6vw; }
+        }
+    </style>
+</head>
+<body class="loading">
+    <div id="title">
+        <h1>- pages -</h1>
+        <p>a collection of pages by <a href="https://charr.cc">charles</a></p>
+    </div>
+    <span class="divider"></span>
+    <div id="loading"><h1>fetching pages.</h1></div>
+    <div id="pages"></div>
+    <script>
+        const IGNORE_PATHS = ["index.html", "license", "readme.md"]
+        // function randomID(length = 10) {
+        //     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        //     let str = '';
+        //     for (let i = 0; i < length; i++) str += chars.charAt(Math.floor(Math.random() * chars.length));
+        //     return str;
+        // };
+        function _fetchPages(tree = "main", location) {
+            return new Promise(function(resolve, reject) {
+                // the cache system is too complicated
+
+                let pages = { }
+                // const cache = localStorage.getItem("nocache") === null
+                // const expiredCache = document.cookie === ""
+                // if (localStorage.getItem(`iscached-${tree}`) === null || !cache || expiredCache) {
+                fetch(`https://api.github.com/repos/charlesyiu/pages/git/trees/${tree}`)
+                    .then(response => {
+                        if (response.ok) return response.json()
+                        else return new Promise(function(resolve, reject) { reject(response.status) })
+                    })
+                    .then(_pages => {
+                        if (_pages.tree.length === 0) return
+                        _pages = _pages.tree
+                        _pages.forEach(page => {
+                            if (!(page.path.toLowerCase().endsWith(".html") && page.type === "blob" || page.type === "tree")) return
+                            if (IGNORE_PATHS.includes(page.path.toLowerCase()) && tree === "main") return
+                            const name = page.path
+                            const type = page.type === "tree" ? page.sha : "blob"
+                            pages[name] = type
+                            // if (location.length !== 0 && cache) {
+                            //     function setCache() {
+                            //         const key = `cached-${location.join("-")}---${name}}`
+                            //         if (localStorage.getItem(key) !== null) return setCache()
+                            //         localStorage.setItem(key, `${name}-${type}`)
+                            //     }
+                            //     setCache()
+                            // }
+                        })
+                        // if (cache) localStorage.setItem(`iscached-${tree}`, "yes")
+                        // if (expiredCache) {
+                        //     let currentDate = new Date(Date.now())
+                        //     currentDate.setDate(currentDate.getDate() + 1)
+                        //     document.cookie = `usecache=yes; expires=${currentDate.toUTCString()};`
+                        // }
+                        resolve(pages)
+                    }, reject)
+                // } else {
+                //     for (let index = 0; index < localStorage.length; index++) {
+                //         const key = localStorage.key(index)
+                //         if (key.startsWith("cached-")) {
+                //             const data = key.slice(7).split("---")
+                //             const location = data[0].slice(0, data[0].lastIndexOf("-"))
+                //             const name = data[1]
+                //             if (location[location.length - 1] === tree) {
+                //                 const type = localStorage.getItem(key)
+
+                //                 function setPage(index = 0, content = pages) {
+                //                     if (index > location.length || location.length === 0) return content[name] = type
+                //                     const innerContent = content[location[index]]
+                //                     if (typeof innerContent === "object") return setPage(index + 1, innerContent)
+                //                     content[indexes[index]][name] = type
+                //                 }
+                //                 setPage()
+                //             }
+                //         }
+                //     }
+                //     resolve(pages)
+                // }
+            })
+        }
+
+        const loadingMessage = document.getElementById("loading").firstChild
+        function fetchPages(sha = "main") {
+            return new Promise(function(resolve, reject) {
+                document.body.classList.add("loading")
+
+                let hasLoaded = false
+
+                function loading() {
+                    if (hasLoaded) return document.body.classList.remove("loading")
+                    setTimeout(function() {
+                        if (!loadingMessage.textContent.endsWith("...")) loadingMessage.textContent += "."
+                        else loadingMessage.textContent = loadingMessage.textContent.slice(0, loadingMessage.textContent.length - 2)
+                        loading()
+                    }, 500)
+                }
+                loading()
+
+                _fetchPages(sha)
+                    .then(pages => {
+                        resolve(pages)
+                        hasLoaded = true
+                    }, reject)
+            })
+        }
+
+        const _pages = document.getElementById("pages")
+        function createPageElement() {
+            const _page = document.createElement("div")
+            _page.classList.add("page")
+            _page.onclick = function(event) {
+                if (event.target !== _page) return
+                _page.firstChild.click()
+            }
+            return _page
+        }
+        function handlePages(pages, _location = [[], []]) {
+            console.log(pages)
+            _pages.innerHTML = ""
+            if (_location[0].length !== 0) {
+                const _page = createPageElement()
+                const _back = document.createElement("button")
+                _back.onclick = function() {
+                    fetchPages(_location[1][_location[1].length - 1])
+                        .then(pages => {
+                            let clonedLocation = _location.slice(0)
+                            clonedLocation[0] = clonedLocation[0].slice(0, clonedLocation[0].length - 1)
+                            clonedLocation[1] = clonedLocation[1].slice(0, clonedLocation[1].length - 1)
+                            handlePages(pages, clonedLocation)
+                        })
+                }
+                _back.textContent = ".."
+                _page.appendChild(_back)
+                _pages.appendChild(_page)
+            }
+            Object.keys(pages).forEach(page => {
+                const type = pages[page]
+                const _page = createPageElement()
+
+                if (type === "blob") {
+                    const _link = document.createElement("a")
+                    _link.href = `${location.protocol}//${location.host}/${_location[0].join("/")}${_location[0].length === 0 ? "" : "/"}${page}`
+                    _link.target = "_blank"
+                    _link.rel = "noopener noreferrer"
+                    _link.textContent = page
+                    _page.appendChild(_link)
+                } else {
+                    const _button = document.createElement("button")
+                    _button.onclick = function() {
+                        fetchPages(type)
+                            .then(pages => {
+                                let clonedLocation = _location.slice(0)
+                                clonedLocation[0].push(page)
+                                clonedLocation[1].push(type)
+                                handlePages(pages, clonedLocation)
+                            })
+                    }
+                    _button.textContent = `${page} /`
+                    _page.appendChild(_button)
+                }
+                _pages.append(_page)
+            })
+        }
+
+        fetchPages()
+            .then(handlePages)
+    </script>
+</body>
+</html>

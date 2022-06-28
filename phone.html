@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone</title>
+    <style>
+        /* phone element's css */
+        /* based on my phone */
+        /* casing */
+        web-phone {
+            position: absolute;
+
+            width: 100px;
+            height: 200px;
+            left: 9px;
+            top: -20px;
+            transform: skewX(7.5deg) translate(5px, 20px);
+
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: -3.5px 5px 0 1px silver;
+        }
+        /* screen */
+        web-phone::before {
+            content: "";
+            position: absolute;
+
+            width: 95px;
+            height: 160px;
+            left: 2.5px;
+            top: 20px;
+
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+        /* home button */
+        web-phone::after {
+            content: "";
+            position: absolute;
+
+            width: 15px;
+            height: 15px;
+            left: 50%;
+            bottom: 2.5px;
+            transform: translateX(-50%);
+
+            background-color: rgba(192, 192, 192, 0.5);
+            border-radius: 100%;
+            /* repurpose dot */
+            box-shadow:
+                /* front-facing camera */
+                -15px -180px 0 -5px black,
+                /* top speaker grill */
+                -7.5px -180px 0 -6px black,
+                -6px -180px 0 -6px black,
+                -4.5px -180px 0 -6px black,
+                -3px -180px 0 -6px black,
+                -1.5px -180px 0 -6px black,
+                0px -180px 0 -6px black,
+                1.5px -180px 0 -6px black,
+                3px -180px 0 -6px black,
+                4.5px -180px 0 -6px black,
+                6px -180px 0 -6px black,
+                7.5px -180px 0 -6px black,
+                /* silent switch */
+                -52px -160px 0 -6.5px white,
+                -51.8px -159px 0 -6.5px white,
+                -51.8px -158px 0 -6.5px white,
+                -51.8px -157px 0 -6.5px white,
+                -51.8px -156px 0 -6.5px white,
+                /* volume up */
+                -51.8px -148px 0 -6.5px white,
+                -51.8px -147px 0 -6.5px white,
+                -51.8px -146px 0 -6.5px white,
+                -51.8px -145px 0 -6.5px white,
+                -51.8px -144px 0 -6.5px white,
+                -51.8px -143px 0 -6.5px white,
+                -51.8px -142px 0 -6.5px white,
+                -51.8px -141px 0 -6.5px white,
+                -51.8px -140px 0 -6.5px white,
+                /* volume down */
+                -51.8px -135px 0 -6.5px white,
+                -51.8px -134px 0 -6.5px white,
+                -51.8px -133px 0 -6.5px white,
+                -51.8px -132px 0 -6.5px white,
+                -51.8px -131px 0 -6.5px white,
+                -51.8px -130px 0 -6.5px white,
+                -51.8px -129px 0 -6.5px white,
+                -51.8px -128px 0 -6.5px white,
+                -51.8px -127px 0 -6.5px white,
+                /* charging port */
+                -3px 12.5px 0 -6px rgb(125, 125, 125),
+                -2px 12.5px 0 -6px rgb(125, 125, 125),
+                -1px 12.5px 0 -6px rgb(125, 125, 125),
+                0px 12.5px 0 -6px rgb(125, 125, 125),
+                1px 12.5px 0 -6px rgb(125, 125, 125),
+                2px 12.5px 0 -6px rgb(125, 125, 125),
+                3px 12.5px 0 -6px rgb(125, 125, 125),
+                /* speaker grill */
+                -15px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -18px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -21px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -24px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -27px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -30px 12.5px 0 -6.5px rgb(162, 162, 162),
+                -33px 12.5px 0 -6.5px rgb(162, 162, 162),
+                15px 12.5px 0 -6.5px rgb(162, 162, 162),
+                18px 12.5px 0 -6.5px rgb(162, 162, 162),
+                21px 12.5px 0 -6.5px rgb(162, 162, 162),
+                24px 12.5px 0 -6.5px rgb(162, 162, 162),
+                27px 12.5px 0 -6.5px rgb(162, 162, 162),
+                30px 12.5px 0 -6.5px rgb(162, 162, 162),
+                33px 12.5px 0 -6.5px rgb(162, 162, 162);
+        }
+        /* css to display the phone */
+        html, body {
+            margin: unset;
+            background-color: rgb(215, 215, 215);
+        }
+        #container {
+            position: fixed;
+            /* not accurate */
+            top: calc(50% - 100px);
+            left: calc(50% - 50px);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <web-phone>
+    </div>
+</body>
+</html>
