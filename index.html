@@ -195,13 +195,12 @@
             return _page
         }
         function handlePages(pages, _location = [[], []]) {
-            console.log(pages)
             _pages.innerHTML = ""
             if (_location[0].length !== 0) {
                 const _page = createPageElement()
                 const _back = document.createElement("button")
                 _back.onclick = function() {
-                    fetchPages(_location[1][_location[1].length - 1])
+                    fetchPages(_location[1][_location[1].length - 2])
                         .then(pages => {
                             let clonedLocation = _location.slice(0)
                             clonedLocation[0] = clonedLocation[0].slice(0, clonedLocation[0].length - 1)
