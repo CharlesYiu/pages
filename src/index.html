@@ -97,6 +97,21 @@
         // };
         function _fetchPages(tree = "main", location) {
             return new Promise(function(resolve, reject) {
+                if (tree === "main") fetch(`https://api.github.com/repos/charlesyiu/pages/git/trees/${tree}`)
+                    .then(response => {
+                        if (response.ok) return response.json()
+                        else return new Promise(function(resolve, reject) { reject(response.status) })
+                    })
+                    .then(_pages => {
+                        _pages = _pages.tree
+                        for (let index = 0; index < _pages; index++) {
+                            const page = _pages[index]
+                            if (page.path === "src") {
+                                tree = page.sha
+                                break
+                            }
+                        }
+                    })
                 // the cache system is too complicated
 
                 let pages = { }
