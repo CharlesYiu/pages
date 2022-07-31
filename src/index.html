@@ -57,6 +57,7 @@
         }
         .page {
             text-align: center;
+            cursor: pointer;
             padding: 10px;
         }
         .page:hover { background-color: rgb(245, 245, 245); }
@@ -69,6 +70,7 @@
         .page > button {
             border: none;
             background-color: unset;
+            cursor: pointer;
         }
         .page:hover > a, .page:hover > button { text-decoration: underline; }
         .page:active > a, .page:active > button { text-decoration: none; }
@@ -83,7 +85,7 @@
 <body class="loading">
     <div id="title">
         <h1>- pages -</h1>
-        <p>a collection of pages by <a href="https://charr.cc">charles</a></p>
+        <p>a collection of pages by <a href="https://yiu.ch">charles</a></p>
     </div>
     <span class="divider"></span>
     <div id="loading"><h1>fetching pages.</h1></div>
@@ -96,24 +98,20 @@
         //     return str;
         // };
         function _fetchPages(tree = "main", location) {
-            return new Promise(function(resolve, reject) {
-                if (tree === "main") fetch(`https://api.github.com/repos/charlesyiu/pages/git/trees/${tree}`)
+            return new Promise(async function(resolve, reject) {
+                if (tree === "main") await fetch(`https://api.github.com/repos/charlesyiu/pages/git/trees/${tree}`)
                     .then(response => {
                         if (response.ok) return response.json()
                         else return new Promise(function(resolve, reject) { reject(response.status) })
                     })
                     .then(_pages => {
                         _pages = _pages.tree
-                        for (let index = 0; index < _pages; index++) {
+                        for (let index = 0; index < _pages.length; index++) {
                             const page = _pages[index]
-                            if (page.path === "src") {
-                                tree = page.sha
-                                break
-                            }
+                            if (page.path === "src") return tree = page.sha
                         }
                     })
                 // the cache system is too complicated
-
                 let pages = { }
                 // const cache = localStorage.getItem("nocache") === null
                 // const expiredCache = document.cookie === ""
@@ -128,7 +126,7 @@
                         _pages = _pages.tree
                         _pages.forEach(page => {
                             if (!(page.path.toLowerCase().endsWith(".html") && page.type === "blob" || page.type === "tree")) return
-                            if ((page.path.toLowerCase() === "index.html") && tree === "main") return
+                            if ((page.path.toLowerCase() === "index.html") && (typeof location === "undefined")) return
                             const name = page.path
                             const type = page.type === "tree" ? page.sha : "blob"
                             pages[name] = type
