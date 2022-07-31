@@ -89,7 +89,6 @@
     <div id="loading"><h1>fetching pages.</h1></div>
     <div id="pages"></div>
     <script>
-        const IGNORE_PATHS = ["index.html", "license", "readme.md"]
         // function randomID(length = 10) {
         //     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         //     let str = '';
@@ -114,7 +113,7 @@
                         _pages = _pages.tree
                         _pages.forEach(page => {
                             if (!(page.path.toLowerCase().endsWith(".html") && page.type === "blob" || page.type === "tree")) return
-                            if (IGNORE_PATHS.includes(page.path.toLowerCase()) && tree === "main") return
+                            if ((page.path.toLowerCase() === "index.html") && tree === "main") return
                             const name = page.path
                             const type = page.type === "tree" ? page.sha : "blob"
                             pages[name] = type
