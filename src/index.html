@@ -167,6 +167,8 @@
                 _pages.append(_page)
             })
         }
+        fetchPages()
+            .then(handlePages)
         const title = document.querySelector("body > section")
         const divider = document.querySelector("body > span")
         let setScrollHeight = false
