@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>color picker</title>
+    <style>
+        body {
+            transition-duration: 10ms;
+            margin: unset;
+        }
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-color: hsl(0, 0%, 100%);
+        }
+        main > h1 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            text-align: center;
+            margin: 10px;
+
+            color: hsl(0, 0%, 100%);
+            mix-blend-mode: difference;
+        }
+    </style>
+    <script>
+        let ignore = true
+        let element = null
+        let textElement = null
+        function rand(min = 0, max = 255) { return Math.floor(Math.random() * (max - min + 1)) + min }
+        function interval(element) {
+            if (!ignore) {
+                const color = `rgb(${rand()}, ${rand()} , ${rand()})`
+                element.style.backgroundColor = color
+                textElement.innerText = color
+            }
+            setTimeout(() => interval(element), rand(50, 100))
+        }
+        window.addEventListener("load", () => {
+            element = document.querySelector("main")
+            textElement = document.querySelector("main > h1")
+            interval(document.querySelector("main"))
+        })
+        window.addEventListener("click", () => ignore = !ignore)
+    </script>
+</head>
+<body>
+    <main>
+        <h1>extreme flashing included.. click to continue.</h1>
+    </main>
+</body>
+</html>
