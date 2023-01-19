@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV</title>
+    <style>
+        html, body {
+            margin: unset;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background-color: rgb(255, 249, 240);
+        }
+        tv-element {
+            position: absolute;
+            background-color: black;
+            width: 50vh;
+            height: 25vh;
+            box-shadow:
+                10px 10px gray,
+                10px -10px gray,
+                -10px 10px gray,
+                -10px -10px gray;
+
+            transform: skew(5deg, 0deg);
+        }
+        tv-element::before {
+            content: "";
+            position: absolute;
+            background-color: rgb(66, 66, 66);
+            width: 10vh;
+            height: 7.5vh;
+            transform: translate(calc(25vh - 50%), calc(25vh + 10px));
+            box-shadow: -10px 0px black;
+        }
+        tv-element::after {
+            content: "";
+            position: absolute;
+            background-color: black;
+            width: calc(10vh + 10px);
+            height: 2.5vh;
+            transform: translate(calc(25vh - 50% + 12.5px), calc(32.5vh + 10px)) skewX(45deg);
+        }
+    </style>
+</head>
+<body>
+    <tv-element></tv-element>
+</body>
+</html>
